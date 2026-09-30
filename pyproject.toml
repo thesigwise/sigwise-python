@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sigwise-sdk"
+version = "1.0.0"
+description = "SigWise API client for Python"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = []
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Typing :: Typed",
+]
+
+[tool.setuptools.packages.find]
+include = ["sigwise*"]
+
+[tool.setuptools.package-data]
+sigwise = ["py.typed"]

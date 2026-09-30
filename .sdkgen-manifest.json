@@ -1,0 +1,17 @@
+{
+  "generator": "generate-sdk",
+  "language": "python",
+  "version": "1.0.0",
+  "files": [
+    ".gitignore",
+    "README.md",
+    "pyproject.toml",
+    "sigwise/__init__.py",
+    "sigwise/_client.py",
+    "sigwise/_core.py",
+    "sigwise/_webhooks.py",
+    "sigwise/py.typed",
+    "sigwise/resources.py",
+    "sigwise/types.py"
+  ]
+}
