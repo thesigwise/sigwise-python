@@ -9,6 +9,7 @@ __all__ = [
     "MeResource",
     "OverviewResource",
     "ObjectsResource",
+    "PlaygroundResource",
     "EventsResource",
     "SignalsResource",
     "SettingsResource",
@@ -187,6 +188,56 @@ class ObjectsResource:
                 "POST",
                 "/v1/objects/{object_id}/analyze",
                 path_params={"object_id": object_id},
+                timeout=timeout,
+            ),
+        )
+
+
+class PlaygroundResource:
+    """Events and messages are the evidence an object's answers are computed from."""
+
+    def __init__(self, core: Core) -> None:
+        self._core = core
+
+    def run(
+        self,
+        *,
+        events: List[types.EventInput],
+        object_type: Optional[str] = None,
+        signals: Optional[List[str]] = None,
+        timeout: Optional[float] = None,
+    ) -> types.PlaygroundResult:
+        """Try signals on sample events.
+
+        Scores sample events against your enabled signals and returns the answers,
+        **without recording anything**: no object is created, the events and answers are
+        not stored, and no rule or webhook fires. Use it to check how your signals judge
+        content before you send real traffic, or after you change a signal's
+        instructions.
+
+        The events are scored on their own, with no history. Restrict the run to some
+        signals with `signals`. At most 50 events per run.
+
+        The analysis is real, so it is charged to your balance like any other and
+        counted as a synchronous analysis in your usage. Returns `402` when the balance
+        is empty, `429` when the account already has the maximum number of synchronous
+        analyses in flight, and `503` with `analyzer_busy` when the analyzer is
+        throttling.
+
+        ``POST /v1/playground``
+        """
+        body: Dict[str, Any] = {}
+        body["events"] = events
+        if object_type is not None:
+            body["object_type"] = object_type
+        if signals is not None:
+            body["signals"] = signals
+        return cast(
+            "types.PlaygroundResult",
+            self._core.request(
+                "POST",
+                "/v1/playground",
+                body=body,
                 timeout=timeout,
             ),
         )
@@ -933,6 +984,8 @@ class BillingResource:
         type: Optional[Literal["credit",
         "charge"]] = None,
         limit: Optional[int] = None,
+        group: Optional[Literal["batch"]] = None,
+        batch_id: Optional[str] = None,
         cursor: Optional[str] = None,
         timeout: Optional[float] = None,
     ) -> types.LedgerPage:
@@ -948,7 +1001,7 @@ class BillingResource:
             self._core.request(
                 "GET",
                 "/v1/billing/ledger",
-                query={"type": type, "limit": limit, "cursor": cursor},
+                query={"type": type, "limit": limit, "group": group, "batch_id": batch_id, "cursor": cursor},
                 timeout=timeout,
             ),
         )

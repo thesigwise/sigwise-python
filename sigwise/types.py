@@ -31,6 +31,7 @@ __all__ = [
     "EventType",
     "IngestAccepted",
     "IngestRequest",
+    "LedgerBatch",
     "LedgerEntry",
     "LedgerPage",
     "Me",
@@ -41,6 +42,8 @@ __all__ = [
     "ObjectState",
     "ObjectSummary",
     "Overview",
+    "PlaygroundRequest",
+    "PlaygroundResult",
     "RiskyObject",
     "Rule",
     "RuleCreate",
@@ -470,6 +473,31 @@ class IngestRequest(_IngestRequestRequired, _IngestRequestOptional):
     """
 
 
+_LedgerBatchRequired = TypedDict("_LedgerBatchRequired", {
+    "count": int,
+    "delta_micros": int,
+    "input_tokens": int,
+    "output_tokens": int,
+    "models": int,
+    "first_at": str,
+})
+_LedgerBatchOptional = TypedDict("_LedgerBatchOptional", {
+    "model": str,
+}, total=False)
+
+
+class LedgerBatch(_LedgerBatchRequired, _LedgerBatchOptional):
+    """The totals of a bulk run, on the entry that stands for it with `group=batch`.
+
+    Fields:
+        count: How many charges the run has.
+        delta_micros: The run's total, in micro-dollars (negative).
+        models: How many distinct models the run was billed for.
+        model: One of the models; the only one when `models` is 1.
+        first_at: When the run's first charge was made.
+    """
+
+
 _LedgerEntryRequired = TypedDict("_LedgerEntryRequired", {
     "id": str,
     "delta_cents": int,
@@ -487,6 +515,8 @@ _LedgerEntryOptional = TypedDict("_LedgerEntryOptional", {
     "input_tokens": int,
     "output_tokens": int,
     "payment_ref": str,
+    "batch_id": str,
+    "batch": LedgerBatch,
 }, total=False)
 
 
@@ -498,6 +528,11 @@ class LedgerEntry(_LedgerEntryRequired, _LedgerEntryOptional):
             round to 0; see `delta_micros`.
         delta_micros: The exact amount in micro-dollars (1e-6 USD).
         payment_ref: The Stripe Checkout Session that paid for a top-up.
+        batch_id: Shared by the charges of one bulk run (re-analyzing all objects,
+            or a signal backfill). Absent for a single object's analysis and for
+            credits.
+        batch: The totals of a bulk run, on the entry that stands for it with
+            `group=batch`.
     """
 
 
@@ -710,6 +745,49 @@ class Overview(_OverviewRequired):
     Fields:
         analyzed_pct: Share of objects with at least one answer, 0–1.
         events_today: Events recorded in the last 24 hours.
+    """
+
+
+_PlaygroundRequestRequired = TypedDict("_PlaygroundRequestRequired", {
+    "events": List[EventInput],
+})
+_PlaygroundRequestOptional = TypedDict("_PlaygroundRequestOptional", {
+    "object_type": str,
+    "signals": List[str],
+}, total=False)
+
+
+class PlaygroundRequest(_PlaygroundRequestRequired, _PlaygroundRequestOptional):
+    """PlaygroundRequest.
+
+    Fields:
+        object_type: Optional classification, e.g. `user` or `listing`.
+        signals: Score only these signal keys. Omit to score every enabled signal.
+    """
+
+
+_PlaygroundResultRequired = TypedDict("_PlaygroundResultRequired", {
+    "analyzed": bool,
+    "model": str,
+    "latency_ms": int,
+    "answers": List[Answer],
+    "cost_micros": int,
+    "events_count": int,
+})
+_PlaygroundResultOptional = TypedDict("_PlaygroundResultOptional", {
+    "reason": str,
+}, total=False)
+
+
+class PlaygroundResult(_PlaygroundResultRequired, _PlaygroundResultOptional):
+    """PlaygroundResult.
+
+    Fields:
+        analyzed: False when no enabled signal matched, so nothing was scored.
+        model: The model that produced the answers, e.g. `model-1`.
+        cost_micros: What the run was charged, in millionths of a US dollar.
+        events_count: How many events were scored.
+        reason: Why nothing was analyzed, when `analyzed` is false.
     """
 
 

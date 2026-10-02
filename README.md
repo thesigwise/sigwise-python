@@ -142,6 +142,13 @@ An object is anything you want answers about: a user, a listing, an order.
 - `sigwise.objects.analyze(object_id: str, *, timeout: Optional[float] = None)`  
   `POST /v1/objects/{object_id}/analyze`: Re-analyze an object
 
+### playground
+
+Events and messages are the evidence an object's answers are computed from.
+
+- `sigwise.playground.run(*, events: List[EventInput], object_type: Optional[str] = None, signals: Optional[List[str]] = None, timeout: Optional[float] = None)`  
+  `POST /v1/playground`: Try signals on sample events
+
 ### events
 
 Events and messages are the evidence an object's answers are computed from.
@@ -242,7 +249,7 @@ Prepaid balance, the billing ledger, and card top-ups.
 
 - `sigwise.billing.get_balance(*, timeout: Optional[float] = None)`  
   `GET /v1/billing`: Get the prepaid balance
-- `sigwise.billing.list_ledger(*, type: Optional[Literal["credit", "charge"]] = None, limit: Optional[int] = None, cursor: Optional[str] = None, timeout: Optional[float] = None)`  
+- `sigwise.billing.list_ledger(*, type: Optional[Literal["credit", "charge"]] = None, limit: Optional[int] = None, group: Optional[Literal["batch"]] = None, batch_id: Optional[str] = None, cursor: Optional[str] = None, timeout: Optional[float] = None)`  
   `GET /v1/billing/ledger`: List ledger entries
 - `sigwise.billing.create_checkout(*, amount_cents: int, timeout: Optional[float] = None)`  
   `POST /v1/billing/checkout`: Start a card top-up

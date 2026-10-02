@@ -3,7 +3,7 @@
 from typing import Mapping, Optional
 
 from ._core import Core
-from .resources import MeResource, OverviewResource, ObjectsResource, EventsResource, SignalsResource, SettingsResource, WebhooksResource, WebhookDeliveriesResource, RulesResource, RuleFiringsResource, ApiKeysResource, BillingResource, UsageResource
+from .resources import MeResource, OverviewResource, ObjectsResource, PlaygroundResource, EventsResource, SignalsResource, SettingsResource, WebhooksResource, WebhookDeliveriesResource, RulesResource, RuleFiringsResource, ApiKeysResource, BillingResource, UsageResource
 
 
 class SigWise:
@@ -21,6 +21,7 @@ class SigWise:
     me: MeResource
     overview: OverviewResource
     objects: ObjectsResource
+    playground: PlaygroundResource
     events: EventsResource
     signals: SignalsResource
     settings: SettingsResource
@@ -46,6 +47,7 @@ class SigWise:
         self.me = MeResource(self._core)
         self.overview = OverviewResource(self._core)
         self.objects = ObjectsResource(self._core)
+        self.playground = PlaygroundResource(self._core)
         self.events = EventsResource(self._core)
         self.signals = SignalsResource(self._core)
         self.settings = SettingsResource(self._core)
