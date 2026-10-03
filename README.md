@@ -16,7 +16,7 @@ pip install sigwise-sdk
 ```python
 from sigwise import SigWise
 
-# Reads ANALYZE_API_KEY and ANALYZE_SECRET when called without arguments.
+# Reads SIGWISE_API_KEY and SIGWISE_SECRET when called without arguments.
 sigwise = SigWise(api_key="your_key_id", secret="your_secret")
 
 # Configure what you want to know about your objects.
@@ -55,8 +55,8 @@ Create an API key in the console. It is a pair: a public key ID and a
 signing secret (`your_secret`, shown once). The client sends the key ID with every
 request and signs a short-lived HS256 token with the secret, bound to the
 request's method and path. The secret itself is never sent, so keep it on your
-server. Without explicit options the client reads `ANALYZE_API_KEY`,
-`ANALYZE_SECRET` and `ANALYZE_BASE_URL` from the environment.
+server. Without explicit options the client reads `SIGWISE_API_KEY`,
+`SIGWISE_SECRET` and `SIGWISE_BASE_URL` from the environment.
 
 ## Configuration
 
@@ -64,7 +64,7 @@ server. Without explicit options the client reads `ANALYZE_API_KEY`,
 sigwise = SigWise(
     api_key="your_key_id",
     secret="your_secret",
-    base_url="http://localhost:8080",  # default: ANALYZE_BASE_URL or the production API
+    base_url="http://localhost:8080",  # default: SIGWISE_BASE_URL or the production API
     timeout=10.0,                      # seconds, per attempt
     max_retries=3,                     # idempotent requests only
 )
@@ -105,7 +105,7 @@ event = construct_webhook_event(
     request.body,
     request.headers.get("X-Webhook-Signature"),
     request.headers.get("X-Webhook-Timestamp"),
-    os.environ["ANALYZE_WEBHOOK_SECRET"],
+    os.environ["SIGWISE_WEBHOOK_SECRET"],
 )
 if event["event"] == "analysis.completed":
     print(event["object_id"], event["answers"])
