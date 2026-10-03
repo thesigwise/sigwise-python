@@ -15,7 +15,7 @@ import urllib.parse
 import urllib.request
 from typing import Any, Dict, Mapping, Optional
 
-VERSION = "1.0.1"
+VERSION = "1.0.2"
 DEFAULT_BASE_URL = "https://api.sigwise.ai"
 
 # How long each request token is valid for, in seconds (the API allows 300).
@@ -96,16 +96,16 @@ class Core:
         max_retries: int = 2,
         headers: Optional[Mapping[str, str]] = None,
     ) -> None:
-        api_key = api_key or os.environ.get("ANALYZE_API_KEY")
-        secret = secret or os.environ.get("ANALYZE_SECRET")
+        api_key = api_key or os.environ.get("SIGWISE_API_KEY")
+        secret = secret or os.environ.get("SIGWISE_SECRET")
         if not api_key or not secret:
             raise ValueError(
                 "SigWise: an API key and its secret are required. Pass api_key= and secret=, "
-                "or set ANALYZE_API_KEY and ANALYZE_SECRET."
+                "or set SIGWISE_API_KEY and SIGWISE_SECRET."
             )
         self.api_key = api_key
         self._secret = secret
-        self.base_url = (base_url or os.environ.get("ANALYZE_BASE_URL") or DEFAULT_BASE_URL).rstrip("/")
+        self.base_url = (base_url or os.environ.get("SIGWISE_BASE_URL") or DEFAULT_BASE_URL).rstrip("/")
         self.timeout = timeout
         self.max_retries = max_retries
         self.headers = dict(headers or {})

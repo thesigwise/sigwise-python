@@ -14,8 +14,8 @@ class SigWise:
         sigwise = SigWise(api_key="your_key_id", secret="your_secret")
         sigwise.objects.get("user-42")
 
-    Without arguments it reads ANALYZE_API_KEY, ANALYZE_SECRET and
-    ANALYZE_BASE_URL from the environment.
+    Without arguments it reads SIGWISE_API_KEY, SIGWISE_SECRET and
+    SIGWISE_BASE_URL from the environment.
     """
 
     me: MeResource
