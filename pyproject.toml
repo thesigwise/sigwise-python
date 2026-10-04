@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sigwise-sdk"
-version = "1.0.3"
+version = "1.0.4"
 description = "SigWise API client for Python"
 readme = "README.md"
 requires-python = ">=3.8"
