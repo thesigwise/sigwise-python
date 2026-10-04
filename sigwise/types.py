@@ -28,6 +28,7 @@ __all__ = [
     "Event",
     "EventInput",
     "EventList",
+    "EventRetention",
     "EventType",
     "IngestAccepted",
     "IngestRequest",
@@ -431,6 +432,15 @@ _EventListRequired = TypedDict("_EventListRequired", {
 class EventList(_EventListRequired):
     """EventList."""
 
+
+# How long the raw events you send are kept. Answers are kept in every mode.
+#
+# - `forever` (default): until you delete the object.
+# - `days`: deleted `event_retention_days` after they were received.
+# - `after_analysis`: deleted as soon as an analysis has read them; their counts
+# stay in the object's summary. Events sent with `wait: true` are never written.
+# Events that cannot be analyzed are deleted after 24 hours regardless.
+EventRetention = Literal["forever", "days", "after_analysis"]
 
 _IngestAcceptedRequired = TypedDict("_IngestAcceptedRequired", {
     "object_id": str,
@@ -925,6 +935,8 @@ class RuleUpdate(_RuleUpdateOptional):
 
 _SettingsRequired = TypedDict("_SettingsRequired", {
     "auto_backfill_signals": bool,
+    "event_retention": EventRetention,
+    "event_retention_days": Optional[int],
 })
 
 
@@ -934,16 +946,27 @@ class Settings(_SettingsRequired):
     Fields:
         auto_backfill_signals: Creating a signal automatically backfills existing
             objects for it. Off by default because each analysis is billed.
+        event_retention: How long the raw events you send are kept.
+        event_retention_days: With `event_retention` `days`, how many days events
+            are kept. `null` otherwise.
     """
 
 
 _SettingsUpdateOptional = TypedDict("_SettingsUpdateOptional", {
     "auto_backfill_signals": bool,
+    "event_retention": EventRetention,
+    "event_retention_days": int,
 }, total=False)
 
 
 class SettingsUpdate(_SettingsUpdateOptional):
-    """SettingsUpdate."""
+    """SettingsUpdate.
+
+    Fields:
+        event_retention: How long the raw events you send are kept.
+        event_retention_days: Required with `event_retention` `days`; not allowed
+            with other values.
+    """
 
 
 _SignalRequired = TypedDict("_SignalRequired", {

@@ -155,6 +155,8 @@ An object is anything you want answers about: a user, a listing, an order.
   `GET /v1/objects`: List objects
 - `sigwise.objects.get(object_id: str, *, timeout: Optional[float] = None)`  
   `GET /v1/objects/{object_id}`: Get an object's analysis
+- `sigwise.objects.delete(object_id: str, *, timeout: Optional[float] = None)`  
+  `DELETE /v1/objects/{object_id}`: Delete an object's data
 - `sigwise.objects.get_state(object_id: str, *, timeout: Optional[float] = None)`  
   `GET /v1/objects/{object_id}/state`: Get an object's compacted history
 - `sigwise.objects.analyze(object_id: str, *, timeout: Optional[float] = None)`  
@@ -197,7 +199,7 @@ The authenticated principal and tenant settings.
 
 - `sigwise.settings.get(*, timeout: Optional[float] = None)`  
   `GET /v1/settings`: Get tenant settings
-- `sigwise.settings.update(*, auto_backfill_signals: Optional[bool] = None, timeout: Optional[float] = None)`  
+- `sigwise.settings.update(*, auto_backfill_signals: Optional[bool] = None, event_retention: Optional[EventRetention] = None, event_retention_days: Optional[int] = None, timeout: Optional[float] = None)`  
   `PATCH /v1/settings`: Update tenant settings
 
 ### webhooks

@@ -15,7 +15,7 @@ import urllib.parse
 import urllib.request
 from typing import Any, Dict, Mapping, Optional
 
-VERSION = "1.0.3"
+VERSION = "1.0.4"
 DEFAULT_BASE_URL = "https://api.sigwise.ai"
 
 # How long each request token is valid for, in seconds (the API allows 300).
