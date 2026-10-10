@@ -601,7 +601,7 @@ class ModerationVerdict(_ModerationVerdictRequired, _ModerationVerdictOptional):
     Fields:
         accepted: How many events were recorded.
         analyzed: False when no configured signal matched, so nothing was scored.
-        model: The model that produced the answers, e.g. `model-1`.
+        model: The model that produced the answers, e.g. `jev-1.13.0`.
         reason: Why nothing was analyzed, when `analyzed` is false.
     """
 
@@ -794,7 +794,7 @@ class PlaygroundResult(_PlaygroundResultRequired, _PlaygroundResultOptional):
 
     Fields:
         analyzed: False when no enabled signal matched, so nothing was scored.
-        model: The model that produced the answers, e.g. `model-1`.
+        model: The model that produced the answers, e.g. `jev-1.13.0`.
         cost_micros: What the run was charged, in millionths of a US dollar.
         events_count: How many events were scored.
         reason: Why nothing was analyzed, when `analyzed` is false.
